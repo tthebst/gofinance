@@ -1,0 +1,94 @@
+swagger: "2.0"
+info:
+  description: Finance api which implements common operations
+  title: Finance API
+  version: 1.0.0
+  contact:
+    email: gretler.tim@gmail.com
+schemes:
+  - http
+  - https
+basePath: /v1
+
+paths:
+  /callPrice:
+    get:
+      tags:
+        - financeapi
+      parameters:
+        - in: body
+          name: callPrice
+          description: calculates call price
+          schema:
+            type: object
+            properties:
+              time-to-maturity:
+                type: number
+                description: time to maturity in years
+              spot-price:
+                type: number
+              strike-price:
+                type: number
+              risk-free-rate:
+                type: number
+                description: value between 0 and 1
+              sigma:
+                type: number
+                description: volatility as a value between 0 and 1
+      responses:
+        200:
+          description: calculate Call price of option
+          schema:
+            type: number
+            description: call price
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+  /putPrice:
+    get:
+      tags:
+        - financeapi
+      parameters:
+        - in: body
+          name: callPrice
+          description: calculates call price
+          schema:
+            type: object
+            properties:
+              time-to-maturity:
+                type: number
+                description: time to maturity in years
+              spot-price:
+                type: number
+              strike-price:
+                type: number
+              risk-free-rate:
+                type: number
+                description: value between 0 and 1
+              sigma:
+                type: number
+                description: volatility as a value between 0 and 1
+      responses:
+        200:
+          description: calculate Call price of option
+          schema:
+            type: number
+            description: call price
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+definitions:
+  error:
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int64
+      message:
+        type: string
+
+      
