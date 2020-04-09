@@ -9,6 +9,10 @@ schemes:
   - http
   - https
 basePath: /v1
+produces:
+  - application/json
+consumes:
+  - application/json
 
 paths:
   /callPrice:

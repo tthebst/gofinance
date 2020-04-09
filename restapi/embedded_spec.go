@@ -18,6 +18,12 @@ var (
 
 func init() {
 	SwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "schemes": [
     "http",
     "https"
@@ -34,6 +40,58 @@ func init() {
   "basePath": "/v1",
   "paths": {
     "/callPrice": {
+      "get": {
+        "tags": [
+          "financeapi"
+        ],
+        "parameters": [
+          {
+            "description": "calculates call price",
+            "name": "callPrice",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "risk-free-rate": {
+                  "description": "value between 0 and 1",
+                  "type": "number"
+                },
+                "sigma": {
+                  "description": "volatility as a value between 0 and 1",
+                  "type": "number"
+                },
+                "spot-price": {
+                  "type": "number"
+                },
+                "strike-price": {
+                  "type": "number"
+                },
+                "time-to-maturity": {
+                  "description": "time to maturity in years",
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "calculate Call price of option",
+            "schema": {
+              "description": "call price",
+              "type": "number"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/putPrice": {
       "get": {
         "tags": [
           "financeapi"
@@ -105,6 +163,12 @@ func init() {
   }
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
   "schemes": [
     "http",
     "https"
@@ -121,6 +185,58 @@ func init() {
   "basePath": "/v1",
   "paths": {
     "/callPrice": {
+      "get": {
+        "tags": [
+          "financeapi"
+        ],
+        "parameters": [
+          {
+            "description": "calculates call price",
+            "name": "callPrice",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "risk-free-rate": {
+                  "description": "value between 0 and 1",
+                  "type": "number"
+                },
+                "sigma": {
+                  "description": "volatility as a value between 0 and 1",
+                  "type": "number"
+                },
+                "spot-price": {
+                  "type": "number"
+                },
+                "strike-price": {
+                  "type": "number"
+                },
+                "time-to-maturity": {
+                  "description": "time to maturity in years",
+                  "type": "number"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "calculate Call price of option",
+            "schema": {
+              "description": "call price",
+              "type": "number"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/putPrice": {
       "get": {
         "tags": [
           "financeapi"

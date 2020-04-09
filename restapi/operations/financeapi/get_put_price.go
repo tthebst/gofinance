@@ -6,7 +6,6 @@ package financeapi
 // Editing this file might prove futile when you re-run the generate command
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
@@ -14,40 +13,40 @@ import (
 	"github.com/go-openapi/swag"
 )
 
-// GetCallPriceHandlerFunc turns a function with the right signature into a get call price handler
-type GetCallPriceHandlerFunc func(GetCallPriceParams) middleware.Responder
+// GetPutPriceHandlerFunc turns a function with the right signature into a get put price handler
+type GetPutPriceHandlerFunc func(GetPutPriceParams) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCallPriceHandlerFunc) Handle(params GetCallPriceParams) middleware.Responder {
+func (fn GetPutPriceHandlerFunc) Handle(params GetPutPriceParams) middleware.Responder {
 	return fn(params)
 }
 
-// GetCallPriceHandler interface for that can handle valid get call price params
-type GetCallPriceHandler interface {
-	Handle(GetCallPriceParams) middleware.Responder
+// GetPutPriceHandler interface for that can handle valid get put price params
+type GetPutPriceHandler interface {
+	Handle(GetPutPriceParams) middleware.Responder
 }
 
-// NewGetCallPrice creates a new http.Handler for the get call price operation
-func NewGetCallPrice(ctx *middleware.Context, handler GetCallPriceHandler) *GetCallPrice {
-	return &GetCallPrice{Context: ctx, Handler: handler}
+// NewGetPutPrice creates a new http.Handler for the get put price operation
+func NewGetPutPrice(ctx *middleware.Context, handler GetPutPriceHandler) *GetPutPrice {
+	return &GetPutPrice{Context: ctx, Handler: handler}
 }
 
-/*GetCallPrice swagger:route GET /callPrice financeapi getCallPrice
+/*GetPutPrice swagger:route GET /putPrice financeapi getPutPrice
 
-GetCallPrice get call price API
+GetPutPrice get put price API
 
 */
-type GetCallPrice struct {
+type GetPutPrice struct {
 	Context *middleware.Context
-	Handler GetCallPriceHandler
+	Handler GetPutPriceHandler
 }
 
-func (o *GetCallPrice) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
+func (o *GetPutPrice) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	route, rCtx, _ := o.Context.RouteInfo(r)
 	if rCtx != nil {
 		r = rCtx
 	}
-	var Params = NewGetCallPriceParams()
+	var Params = NewGetPutPriceParams()
 
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
@@ -56,16 +55,14 @@ func (o *GetCallPrice) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	res := o.Handler.Handle(Params) // actually handle the request
 
-	fmt.Println(Params)
-
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
 }
 
-// GetCallPriceBody get call price body
+// GetPutPriceBody get put price body
 //
-// swagger:model GetCallPriceBody
-type GetCallPriceBody struct {
+// swagger:model GetPutPriceBody
+type GetPutPriceBody struct {
 
 	// value between 0 and 1
 	RiskFreeRate float64 `json:"risk-free-rate,omitempty"`
@@ -83,13 +80,13 @@ type GetCallPriceBody struct {
 	TimeToMaturity float64 `json:"time-to-maturity,omitempty"`
 }
 
-// Validate validates this get call price body
-func (o *GetCallPriceBody) Validate(formats strfmt.Registry) error {
+// Validate validates this get put price body
+func (o *GetPutPriceBody) Validate(formats strfmt.Registry) error {
 	return nil
 }
 
 // MarshalBinary interface implementation
-func (o *GetCallPriceBody) MarshalBinary() ([]byte, error) {
+func (o *GetPutPriceBody) MarshalBinary() ([]byte, error) {
 	if o == nil {
 		return nil, nil
 	}
@@ -97,8 +94,8 @@ func (o *GetCallPriceBody) MarshalBinary() ([]byte, error) {
 }
 
 // UnmarshalBinary interface implementation
-func (o *GetCallPriceBody) UnmarshalBinary(b []byte) error {
-	var res GetCallPriceBody
+func (o *GetPutPriceBody) UnmarshalBinary(b []byte) error {
+	var res GetPutPriceBody
 	if err := swag.ReadJSON(b, &res); err != nil {
 		return err
 	}
