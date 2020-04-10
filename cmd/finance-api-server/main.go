@@ -3,6 +3,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"os"
 
@@ -26,7 +27,9 @@ func main() {
 	server := restapi.NewServer(api)
 	defer server.Shutdown()
 
+	var portFlag = flag.Int("port", 3000, "Port to run this service on")
 	parser := flags.NewParser(server, flags.Default)
+	server.Port = *portFlag
 	parser.ShortDescription = "Finance API"
 	parser.LongDescription = "Finance api which implements common operations"
 	server.ConfigureFlags()

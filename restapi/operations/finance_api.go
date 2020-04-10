@@ -47,6 +47,7 @@ func NewFinanceAPI(spec *loads.Document) *FinanceAPI {
 			return middleware.NotImplemented("operation financeapi.GetCallPrice has not yet been implemented")
 		}),
 		FinanceapiGetPutPriceHandler: financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
+
 			return middleware.NotImplemented("operation financeapi.GetPutPrice has not yet been implemented")
 		}),
 	}

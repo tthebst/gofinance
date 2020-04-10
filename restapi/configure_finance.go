@@ -39,7 +39,6 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 			return middleware.NotImplemented("operation financeapi.GetCallPrice has not yet been implemented")
 		})
 	}
-
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}
