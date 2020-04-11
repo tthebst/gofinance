@@ -19,26 +19,14 @@ paths:
     get:
       tags:
         - financeapi
+      operationId: get_call_price
       parameters:
         - in: body
           name: callPrice
           description: calculates call price
+          
           schema:
-            type: object
-            properties:
-              time-to-maturity:
-                type: number
-                description: time to maturity in years
-              spot-price:
-                type: number
-              strike-price:
-                type: number
-              risk-free-rate:
-                type: number
-                description: value between 0 and 1
-              sigma:
-                type: number
-                description: volatility as a value between 0 and 1
+            $ref: "#/definitions/option-price"
       responses:
         200:
           description: calculate Call price of option
@@ -53,26 +41,13 @@ paths:
     get:
       tags:
         - financeapi
+      operationId: get_put_price
       parameters:
         - in: body
           name: callPrice
           description: calculates call price
           schema:
-            type: object
-            properties:
-              time-to-maturity:
-                type: number
-                description: time to maturity in years
-              spot-price:
-                type: number
-              strike-price:
-                type: number
-              risk-free-rate:
-                type: number
-                description: value between 0 and 1
-              sigma:
-                type: number
-                description: volatility as a value between 0 and 1
+            $ref: "#/definitions/error"
       responses:
         200:
           description: calculate Call price of option
@@ -84,6 +59,28 @@ paths:
           schema:
             $ref: "#/definitions/error"
 definitions:
+  option-price:
+    type: object
+    properties:
+      time-to-maturity:
+        type: number
+        description: time to maturity in years
+      spot-price:
+        type: number
+      strike-price:
+        type: number
+      risk-free-rate:
+        type: number
+        description: value between 0 and 1
+      sigma:
+        type: number
+        description: volatility as a value between 0 and 1
+    required:
+      - time-to-maturity
+      - spot-price
+      - risk-free-rate
+      - sigma
+      - strike-price
   error:
     type: object
     required:

@@ -9,8 +9,6 @@ import (
 	"net/http"
 
 	"github.com/go-openapi/runtime/middleware"
-	"github.com/go-openapi/strfmt"
-	"github.com/go-openapi/swag"
 )
 
 // GetPutPriceHandlerFunc turns a function with the right signature into a get put price handler
@@ -57,48 +55,4 @@ func (o *GetPutPrice) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
-}
-
-// GetPutPriceBody get put price body
-//
-// swagger:model GetPutPriceBody
-type GetPutPriceBody struct {
-
-	// value between 0 and 1
-	RiskFreeRate float64 `json:"risk-free-rate,omitempty"`
-
-	// volatility as a value between 0 and 1
-	Sigma float64 `json:"sigma,omitempty"`
-
-	// spot price
-	SpotPrice float64 `json:"spot-price,omitempty"`
-
-	// strike price
-	StrikePrice float64 `json:"strike-price,omitempty"`
-
-	// time to maturity in years
-	TimeToMaturity float64 `json:"time-to-maturity,omitempty"`
-}
-
-// Validate validates this get put price body
-func (o *GetPutPriceBody) Validate(formats strfmt.Registry) error {
-	return nil
-}
-
-// MarshalBinary interface implementation
-func (o *GetPutPriceBody) MarshalBinary() ([]byte, error) {
-	if o == nil {
-		return nil, nil
-	}
-	return swag.WriteJSON(o)
-}
-
-// UnmarshalBinary interface implementation
-func (o *GetPutPriceBody) UnmarshalBinary(b []byte) error {
-	var res GetPutPriceBody
-	if err := swag.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*o = res
-	return nil
 }

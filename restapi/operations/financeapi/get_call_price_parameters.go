@@ -11,6 +11,8 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+
+	"github.com/gofinance/models"
 )
 
 // NewGetCallPriceParams creates a new GetCallPriceParams object
@@ -23,7 +25,7 @@ func NewGetCallPriceParams() GetCallPriceParams {
 // GetCallPriceParams contains all the bound params for the get call price operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetCallPrice
+// swagger:parameters get_call_price
 type GetCallPriceParams struct {
 
 	// HTTP Request Object
@@ -32,7 +34,7 @@ type GetCallPriceParams struct {
 	/*calculates call price
 	  In: body
 	*/
-	CallPrice GetCallPriceBody
+	CallPrice *models.OptionPrice
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -46,7 +48,7 @@ func (o *GetCallPriceParams) BindRequest(r *http.Request, route *middleware.Matc
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body GetCallPriceBody
+		var body models.OptionPrice
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			res = append(res, errors.NewParseError("callPrice", "body", "", err))
 		} else {
@@ -56,7 +58,7 @@ func (o *GetCallPriceParams) BindRequest(r *http.Request, route *middleware.Matc
 			}
 
 			if len(res) == 0 {
-				o.CallPrice = body
+				o.CallPrice = &body
 			}
 		}
 	}

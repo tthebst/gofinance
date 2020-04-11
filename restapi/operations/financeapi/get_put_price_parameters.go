@@ -11,6 +11,8 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+
+	"github.com/gofinance/models"
 )
 
 // NewGetPutPriceParams creates a new GetPutPriceParams object
@@ -23,7 +25,7 @@ func NewGetPutPriceParams() GetPutPriceParams {
 // GetPutPriceParams contains all the bound params for the get put price operation
 // typically these are obtained from a http.Request
 //
-// swagger:parameters GetPutPrice
+// swagger:parameters get_put_price
 type GetPutPriceParams struct {
 
 	// HTTP Request Object
@@ -32,7 +34,7 @@ type GetPutPriceParams struct {
 	/*calculates call price
 	  In: body
 	*/
-	CallPrice GetPutPriceBody
+	CallPrice *models.Error
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -46,7 +48,7 @@ func (o *GetPutPriceParams) BindRequest(r *http.Request, route *middleware.Match
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body GetPutPriceBody
+		var body models.Error
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
 			res = append(res, errors.NewParseError("callPrice", "body", "", err))
 		} else {
@@ -56,7 +58,7 @@ func (o *GetPutPriceParams) BindRequest(r *http.Request, route *middleware.Match
 			}
 
 			if len(res) == 0 {
-				o.CallPrice = body
+				o.CallPrice = &body
 			}
 		}
 	}

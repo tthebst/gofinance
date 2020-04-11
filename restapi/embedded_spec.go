@@ -44,33 +44,14 @@ func init() {
         "tags": [
           "financeapi"
         ],
+        "operationId": "get_call_price",
         "parameters": [
           {
             "description": "calculates call price",
             "name": "callPrice",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "risk-free-rate": {
-                  "description": "value between 0 and 1",
-                  "type": "number"
-                },
-                "sigma": {
-                  "description": "volatility as a value between 0 and 1",
-                  "type": "number"
-                },
-                "spot-price": {
-                  "type": "number"
-                },
-                "strike-price": {
-                  "type": "number"
-                },
-                "time-to-maturity": {
-                  "description": "time to maturity in years",
-                  "type": "number"
-                }
-              }
+              "$ref": "#/definitions/option-price"
             }
           }
         ],
@@ -96,33 +77,14 @@ func init() {
         "tags": [
           "financeapi"
         ],
+        "operationId": "get_put_price",
         "parameters": [
           {
             "description": "calculates call price",
             "name": "callPrice",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "risk-free-rate": {
-                  "description": "value between 0 and 1",
-                  "type": "number"
-                },
-                "sigma": {
-                  "description": "volatility as a value between 0 and 1",
-                  "type": "number"
-                },
-                "spot-price": {
-                  "type": "number"
-                },
-                "strike-price": {
-                  "type": "number"
-                },
-                "time-to-maturity": {
-                  "description": "time to maturity in years",
-                  "type": "number"
-                }
-              }
+              "$ref": "#/definitions/error"
             }
           }
         ],
@@ -157,6 +119,36 @@ func init() {
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "option-price": {
+      "type": "object",
+      "required": [
+        "time-to-maturity",
+        "spot-price",
+        "risk-free-rate",
+        "sigma",
+        "strike-price"
+      ],
+      "properties": {
+        "risk-free-rate": {
+          "description": "value between 0 and 1",
+          "type": "number"
+        },
+        "sigma": {
+          "description": "volatility as a value between 0 and 1",
+          "type": "number"
+        },
+        "spot-price": {
+          "type": "number"
+        },
+        "strike-price": {
+          "type": "number"
+        },
+        "time-to-maturity": {
+          "description": "time to maturity in years",
+          "type": "number"
         }
       }
     }
@@ -189,33 +181,14 @@ func init() {
         "tags": [
           "financeapi"
         ],
+        "operationId": "get_call_price",
         "parameters": [
           {
             "description": "calculates call price",
             "name": "callPrice",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "risk-free-rate": {
-                  "description": "value between 0 and 1",
-                  "type": "number"
-                },
-                "sigma": {
-                  "description": "volatility as a value between 0 and 1",
-                  "type": "number"
-                },
-                "spot-price": {
-                  "type": "number"
-                },
-                "strike-price": {
-                  "type": "number"
-                },
-                "time-to-maturity": {
-                  "description": "time to maturity in years",
-                  "type": "number"
-                }
-              }
+              "$ref": "#/definitions/option-price"
             }
           }
         ],
@@ -241,33 +214,14 @@ func init() {
         "tags": [
           "financeapi"
         ],
+        "operationId": "get_put_price",
         "parameters": [
           {
             "description": "calculates call price",
             "name": "callPrice",
             "in": "body",
             "schema": {
-              "type": "object",
-              "properties": {
-                "risk-free-rate": {
-                  "description": "value between 0 and 1",
-                  "type": "number"
-                },
-                "sigma": {
-                  "description": "volatility as a value between 0 and 1",
-                  "type": "number"
-                },
-                "spot-price": {
-                  "type": "number"
-                },
-                "strike-price": {
-                  "type": "number"
-                },
-                "time-to-maturity": {
-                  "description": "time to maturity in years",
-                  "type": "number"
-                }
-              }
+              "$ref": "#/definitions/error"
             }
           }
         ],
@@ -302,6 +256,36 @@ func init() {
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "option-price": {
+      "type": "object",
+      "required": [
+        "time-to-maturity",
+        "spot-price",
+        "risk-free-rate",
+        "sigma",
+        "strike-price"
+      ],
+      "properties": {
+        "risk-free-rate": {
+          "description": "value between 0 and 1",
+          "type": "number"
+        },
+        "sigma": {
+          "description": "volatility as a value between 0 and 1",
+          "type": "number"
+        },
+        "spot-price": {
+          "type": "number"
+        },
+        "strike-price": {
+          "type": "number"
+        },
+        "time-to-maturity": {
+          "description": "time to maturity in years",
+          "type": "number"
         }
       }
     }

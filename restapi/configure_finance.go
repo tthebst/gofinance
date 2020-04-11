@@ -9,7 +9,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
-
+	"github.com/gofinance/internal"
 	"github.com/gofinance/restapi/operations"
 	"github.com/gofinance/restapi/operations/financeapi"
 )
@@ -39,6 +39,20 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 			return middleware.NotImplemented("operation financeapi.GetCallPrice has not yet been implemented")
 		})
 	}
+	if api.FinanceapiGetPutPriceHandler == nil {
+		api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
+
+			return middleware.NotImplemented("operation financeapi.GetPutPrice has not yet been implemented")
+		})
+	}
+	api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
+		call_price, _ := internal.Blackscholes(*params.CallPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
+		resp_ok := financeapi.NewGetCallPriceOK()
+
+		resp_ok.SetPayload(call_price)
+		return resp_ok
+	})
+
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}
