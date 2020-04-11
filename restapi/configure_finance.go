@@ -10,6 +10,7 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 	"github.com/gofinance/internal"
+	"github.com/gofinance/models"
 	"github.com/gofinance/restapi/operations"
 	"github.com/gofinance/restapi/operations/financeapi"
 )
@@ -34,21 +35,32 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	if api.FinanceapiGetCallPriceHandler == nil {
-		api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
-			return middleware.NotImplemented("operation financeapi.GetCallPrice has not yet been implemented")
-		})
-	}
-	if api.FinanceapiGetPutPriceHandler == nil {
-		api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
+	api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
 
-			return middleware.NotImplemented("operation financeapi.GetPutPrice has not yet been implemented")
-		})
-	}
-	api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
-		call_price, _ := internal.Blackscholes(*params.CallPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
+		put_price, err := internal.Get_put_price(*params.PutPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
+		if err != nil {
+			resp_err := financeapi.NewGetCallPriceDefault(500)
+			err := err.Error()
+			erro := models.Error{Code: 500, Message: &err}
+			resp_err.SetPayload(&erro)
+			return resp_err
+		}
 		resp_ok := financeapi.NewGetCallPriceOK()
+		resp_ok.SetPayload(put_price)
+		return resp_ok
+	})
 
+	//actuall handiling of get call price api call
+	api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
+		call_price, err := internal.Get_call_price(*params.CallPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
+		if err != nil {
+			resp_err := financeapi.NewGetCallPriceDefault(500)
+			err := err.Error()
+			erro := models.Error{Code: 500, Message: &err}
+			resp_err.SetPayload(&erro)
+			return resp_err
+		}
+		resp_ok := financeapi.NewGetCallPriceOK()
 		resp_ok.SetPayload(call_price)
 		return resp_ok
 	})

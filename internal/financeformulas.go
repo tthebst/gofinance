@@ -16,7 +16,7 @@ import (
 // float sig -> volatility of underlying asset
 // Returns:
 // float c -> call price
-func Blackscholes(time_to_mat float64, spot float64, strike float64, risk_free float64, sig float64) (float64, error) {
+func blackscholes(time_to_mat float64, spot float64, strike float64, risk_free float64, sig float64) (float64, error) {
 
 	//check if any negativce values were provided
 	if time_to_mat < 0 || spot < 0 || strike < 0 || risk_free < 0 || sig < 0 {
@@ -40,4 +40,19 @@ func Blackscholes(time_to_mat float64, spot float64, strike float64, risk_free f
 
 	return call_price, nil
 
+}
+
+//returns call price of an option
+func Get_call_price(time_to_mat float64, spot float64, strike float64, risk_free float64, sig float64) (float64, error) {
+
+	return blackscholes(time_to_mat, spot, strike, risk_free, sig)
+}
+
+//returns put price of an option
+func Get_put_price(time_to_mat float64, spot float64, strike float64, risk_free float64, sig float64) (float64, error) {
+	call_price, err := blackscholes(time_to_mat, spot, strike, risk_free, sig)
+
+	//calcul
+	put_price := strike*math.Exp(-risk_free*time_to_mat) - spot + call_price
+	return put_price, err
 }

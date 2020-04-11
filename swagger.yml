@@ -44,16 +44,16 @@ paths:
       operationId: get_put_price
       parameters:
         - in: body
-          name: callPrice
-          description: calculates call price
+          name: putPrice
+          description: calculates put price
           schema:
-            $ref: "#/definitions/error"
+            $ref: "#/definitions/option-price"
       responses:
         200:
-          description: calculate Call price of option
+          description: calculate put price of option
           schema:
             type: number
-            description: call price
+            description: put price
         default:
           description: generic error response
           schema:
