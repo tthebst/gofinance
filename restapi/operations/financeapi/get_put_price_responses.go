@@ -16,13 +16,13 @@ import (
 // GetPutPriceOKCode is the HTTP code returned for type GetPutPriceOK
 const GetPutPriceOKCode int = 200
 
-/*GetPutPriceOK calculate Call price of option
+/*GetPutPriceOK calculate put price of option
 
 swagger:response getPutPriceOK
 */
 type GetPutPriceOK struct {
 
-	/*call price
+	/*put price
 	  In: Body
 	*/
 	Payload float64 `json:"body,omitempty"`

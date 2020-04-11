@@ -31,10 +31,10 @@ type GetPutPriceParams struct {
 	// HTTP Request Object
 	HTTPRequest *http.Request `json:"-"`
 
-	/*calculates call price
+	/*calculates put price
 	  In: body
 	*/
-	CallPrice *models.Error
+	PutPrice *models.OptionPrice
 }
 
 // BindRequest both binds and validates a request, it assumes that complex things implement a Validatable(strfmt.Registry) error interface
@@ -48,9 +48,9 @@ func (o *GetPutPriceParams) BindRequest(r *http.Request, route *middleware.Match
 
 	if runtime.HasBody(r) {
 		defer r.Body.Close()
-		var body models.Error
+		var body models.OptionPrice
 		if err := route.Consumer.Consume(r.Body, &body); err != nil {
-			res = append(res, errors.NewParseError("callPrice", "body", "", err))
+			res = append(res, errors.NewParseError("putPrice", "body", "", err))
 		} else {
 			// validate body object
 			if err := body.Validate(route.Formats); err != nil {
@@ -58,7 +58,7 @@ func (o *GetPutPriceParams) BindRequest(r *http.Request, route *middleware.Match
 			}
 
 			if len(res) == 0 {
-				o.CallPrice = &body
+				o.PutPrice = &body
 			}
 		}
 	}

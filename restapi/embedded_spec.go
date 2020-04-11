@@ -80,19 +80,19 @@ func init() {
         "operationId": "get_put_price",
         "parameters": [
           {
-            "description": "calculates call price",
-            "name": "callPrice",
+            "description": "calculates put price",
+            "name": "putPrice",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/error"
+              "$ref": "#/definitions/option-price"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "calculate Call price of option",
+            "description": "calculate put price of option",
             "schema": {
-              "description": "call price",
+              "description": "put price",
               "type": "number"
             }
           },
@@ -217,19 +217,19 @@ func init() {
         "operationId": "get_put_price",
         "parameters": [
           {
-            "description": "calculates call price",
-            "name": "callPrice",
+            "description": "calculates put price",
+            "name": "putPrice",
             "in": "body",
             "schema": {
-              "$ref": "#/definitions/error"
+              "$ref": "#/definitions/option-price"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "calculate Call price of option",
+            "description": "calculate put price of option",
             "schema": {
-              "description": "call price",
+              "description": "put price",
               "type": "number"
             }
           },

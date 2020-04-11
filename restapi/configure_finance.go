@@ -37,7 +37,7 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 
 	api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
 
-		put_price, err := internal.Get_put_price(*params.PutPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
+		put_price, err := internal.Get_put_price(*params.PutPrice.TimeToMaturity, *params.PutPrice.SpotPrice, *params.PutPrice.StrikePrice, *params.PutPrice.RiskFreeRate, *params.PutPrice.Sigma)
 		if err != nil {
 			resp_err := financeapi.NewGetCallPriceDefault(500)
 			err := err.Error()

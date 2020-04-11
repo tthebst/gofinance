@@ -58,6 +58,29 @@ paths:
           description: generic error response
           schema:
             $ref: "#/definitions/error"
+  /movingaverage:
+    get:
+      tags:
+        - financeapi
+      operationId: movingaverage
+      parameters:
+        - in: body
+          name: movingaverage
+          description: calculates movingaverage
+          schema:
+            $ref: "#/definitions/movingaverage-input"
+      responses:
+        200:
+          description: calculate put price of option
+          schema:
+              type: array
+              items:
+                type: integer
+              description: movingaverage
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
 definitions:
   option-price:
     type: object
@@ -81,6 +104,18 @@ definitions:
       - risk-free-rate
       - sigma
       - strike-price
+  movingaverage-input:
+    type: object
+    properties:
+      time-data:
+        type: array
+        items:
+          type: integer
+      point-to-avg:
+        type: number
+    required:
+      - time-data
+      - point-to-avg
   error:
     type: object
     required:
