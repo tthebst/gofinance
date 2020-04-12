@@ -49,6 +49,9 @@ func NewFinanceAPI(spec *loads.Document) *FinanceAPI {
 		FinanceapiGetPutPriceHandler: financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
 			return middleware.NotImplemented("operation financeapi.GetPutPrice has not yet been implemented")
 		}),
+		FinanceapiMovingaverageHandler: financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams) middleware.Responder {
+			return middleware.NotImplemented("operation financeapi.Movingaverage has not yet been implemented")
+		}),
 	}
 }
 
@@ -86,6 +89,8 @@ type FinanceAPI struct {
 	FinanceapiGetCallPriceHandler financeapi.GetCallPriceHandler
 	// FinanceapiGetPutPriceHandler sets the operation handler for the get put price operation
 	FinanceapiGetPutPriceHandler financeapi.GetPutPriceHandler
+	// FinanceapiMovingaverageHandler sets the operation handler for the movingaverage operation
+	FinanceapiMovingaverageHandler financeapi.MovingaverageHandler
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
 	ServeError func(http.ResponseWriter, *http.Request, error)
@@ -157,6 +162,9 @@ func (o *FinanceAPI) Validate() error {
 	}
 	if o.FinanceapiGetPutPriceHandler == nil {
 		unregistered = append(unregistered, "financeapi.GetPutPriceHandler")
+	}
+	if o.FinanceapiMovingaverageHandler == nil {
+		unregistered = append(unregistered, "financeapi.MovingaverageHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -254,6 +262,10 @@ func (o *FinanceAPI) initHandlerCache() {
 		o.handlers["GET"] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/putPrice"] = financeapi.NewGetPutPrice(o.context, o.FinanceapiGetPutPriceHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/movingaverage"] = financeapi.NewMovingaverage(o.context, o.FinanceapiMovingaverageHandler)
 }
 
 // Serve creates a http handler to serve the API over HTTP

@@ -16,7 +16,7 @@ import (
 // GetCallPriceOKCode is the HTTP code returned for type GetCallPriceOK
 const GetCallPriceOKCode int = 200
 
-/*GetCallPriceOK calculate Call price of option
+/*GetCallPriceOK return call price
 
 swagger:response getCallPriceOK
 */

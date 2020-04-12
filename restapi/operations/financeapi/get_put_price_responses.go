@@ -16,7 +16,7 @@ import (
 // GetPutPriceOKCode is the HTTP code returned for type GetPutPriceOK
 const GetPutPriceOKCode int = 200
 
-/*GetPutPriceOK calculate put price of option
+/*GetPutPriceOK return put price
 
 swagger:response getPutPriceOK
 */

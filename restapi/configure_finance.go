@@ -35,6 +35,7 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
+	//actuall handiling of get put price api call
 	api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
 
 		put_price, err := internal.Get_put_price(*params.PutPrice.TimeToMaturity, *params.PutPrice.SpotPrice, *params.PutPrice.StrikePrice, *params.PutPrice.RiskFreeRate, *params.PutPrice.Sigma)
@@ -62,6 +63,20 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 		}
 		resp_ok := financeapi.NewGetCallPriceOK()
 		resp_ok.SetPayload(call_price)
+		return resp_ok
+	})
+
+	api.FinanceapiMovingaverageHandler = financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams) middleware.Responder {
+		mov, err := internal.Get_movingaverage(params.Movingaverage.TimeData, int(*params.Movingaverage.PointToAvg))
+		if err != nil {
+			resp_err := financeapi.NewMovingaverageDefault(500)
+			err := err.Error()
+			erro := models.Error{Code: 500, Message: &err}
+			resp_err.SetPayload(&erro)
+			return resp_err
+		}
+		resp_ok := financeapi.NewMovingaverageOK()
+		resp_ok.SetPayload(mov)
 		return resp_ok
 	})
 

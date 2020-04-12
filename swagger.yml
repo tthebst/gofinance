@@ -29,7 +29,7 @@ paths:
             $ref: "#/definitions/option-price"
       responses:
         200:
-          description: calculate Call price of option
+          description: return call price
           schema:
             type: number
             description: call price
@@ -50,7 +50,7 @@ paths:
             $ref: "#/definitions/option-price"
       responses:
         200:
-          description: calculate put price of option
+          description: return put price
           schema:
             type: number
             description: put price
@@ -71,12 +71,12 @@ paths:
             $ref: "#/definitions/movingaverage-input"
       responses:
         200:
-          description: calculate put price of option
+          description: returns moving average 
           schema:
               type: array
               items:
-                type: integer
-              description: movingaverage
+                type: number
+              description: movingaverage datas
         default:
           description: generic error response
           schema:
@@ -110,9 +110,9 @@ definitions:
       time-data:
         type: array
         items:
-          type: integer
+          type: number
       point-to-avg:
-        type: number
+        type: integer
     required:
       - time-data
       - point-to-avg

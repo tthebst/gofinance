@@ -42,6 +42,33 @@ func blackscholes(time_to_mat float64, spot float64, strike float64, risk_free f
 
 }
 
+func movingaverage(data []float64, days_to_avg int) ([]float64, error) {
+
+	//return error invalid data
+	if len(data) < 1 {
+		return make([]float64, 1), errors.New("invalid time-data input")
+	}
+	// days_to_avg needs to be bigger than or 1
+	if days_to_avg < 1 {
+		return make([]float64, 1), errors.New("invalid days to average need to bigger then 1")
+	}
+
+	// create new array for movingaverage data, is smaller than data array because for first values can't calculates average
+	mov_avg := make([]float64, len(data)-days_to_avg+1)
+
+	// loop throung movering average loop and perform sliding window operation over data to calculate moving average
+	// Time complexity O(n*d), n size of data array, d days to average
+	for i := 0; i < len(mov_avg); i++ {
+		for j := 0; j < days_to_avg; j++ {
+			//position in data array is shifted by days_to_avg-1 in comparisan to move avg array
+			mov_avg[i] += data[i+days_to_avg-1-j]
+		}
+		mov_avg[i] = mov_avg[i] / float64(days_to_avg)
+	}
+	return mov_avg, nil
+
+}
+
 //returns call price of an option
 func Get_call_price(time_to_mat float64, spot float64, strike float64, risk_free float64, sig float64) (float64, error) {
 
@@ -55,4 +82,8 @@ func Get_put_price(time_to_mat float64, spot float64, strike float64, risk_free 
 	//calcul
 	put_price := strike*math.Exp(-risk_free*time_to_mat) - spot + call_price
 	return put_price, err
+}
+
+func Get_movingaverage(data []float64, days_to_avg int) ([]float64, error) {
+	return movingaverage(data, days_to_avg)
 }

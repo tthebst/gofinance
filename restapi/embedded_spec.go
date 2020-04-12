@@ -57,10 +57,46 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "calculate Call price of option",
+            "description": "return call price",
             "schema": {
               "description": "call price",
               "type": "number"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/movingaverage": {
+      "get": {
+        "tags": [
+          "financeapi"
+        ],
+        "operationId": "movingaverage",
+        "parameters": [
+          {
+            "description": "calculates movingaverage",
+            "name": "movingaverage",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/movingaverage-input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns moving average",
+            "schema": {
+              "description": "movingaverage datas",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
             }
           },
           "default": {
@@ -90,7 +126,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "calculate put price of option",
+            "description": "return put price",
             "schema": {
               "description": "put price",
               "type": "number"
@@ -119,6 +155,24 @@ func init() {
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "movingaverage-input": {
+      "type": "object",
+      "required": [
+        "time-data",
+        "point-to-avg"
+      ],
+      "properties": {
+        "point-to-avg": {
+          "type": "integer"
+        },
+        "time-data": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
         }
       }
     },
@@ -194,10 +248,46 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "calculate Call price of option",
+            "description": "return call price",
             "schema": {
               "description": "call price",
               "type": "number"
+            }
+          },
+          "default": {
+            "description": "generic error response",
+            "schema": {
+              "$ref": "#/definitions/error"
+            }
+          }
+        }
+      }
+    },
+    "/movingaverage": {
+      "get": {
+        "tags": [
+          "financeapi"
+        ],
+        "operationId": "movingaverage",
+        "parameters": [
+          {
+            "description": "calculates movingaverage",
+            "name": "movingaverage",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/movingaverage-input"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "returns moving average",
+            "schema": {
+              "description": "movingaverage datas",
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
             }
           },
           "default": {
@@ -227,7 +317,7 @@ func init() {
         ],
         "responses": {
           "200": {
-            "description": "calculate put price of option",
+            "description": "return put price",
             "schema": {
               "description": "put price",
               "type": "number"
@@ -256,6 +346,24 @@ func init() {
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "movingaverage-input": {
+      "type": "object",
+      "required": [
+        "time-data",
+        "point-to-avg"
+      ],
+      "properties": {
+        "point-to-avg": {
+          "type": "integer"
+        },
+        "time-data": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
         }
       }
     },
