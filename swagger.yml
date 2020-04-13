@@ -14,6 +14,21 @@ produces:
 consumes:
   - application/json
 
+securityDefinitions:
+  basicAuth:
+    type: basic
+  # X-API-Key: abcdef12345
+  apikey:
+    type: apiKey
+    in: header
+    name: x-token
+security:
+  - basicAuth: []
+  - apikey: []
+
+
+
+
 paths:
   /callPrice:
     get:
@@ -126,5 +141,7 @@ definitions:
         format: int64
       message:
         type: string
+  principal:
+    type: string
 
       

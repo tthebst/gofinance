@@ -205,8 +205,29 @@ func init() {
           "type": "number"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
-  }
+  },
+  "securityDefinitions": {
+    "apikey": {
+      "type": "apiKey",
+      "name": "x-token",
+      "in": "header"
+    },
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    },
+    {
+      "apikey": []
+    }
+  ]
 }`))
 	FlatSwaggerJSON = json.RawMessage([]byte(`{
   "consumes": [
@@ -396,7 +417,28 @@ func init() {
           "type": "number"
         }
       }
+    },
+    "principal": {
+      "type": "string"
     }
-  }
+  },
+  "securityDefinitions": {
+    "apikey": {
+      "type": "apiKey",
+      "name": "x-token",
+      "in": "header"
+    },
+    "basicAuth": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "basicAuth": []
+    },
+    {
+      "apikey": []
+    }
+  ]
 }`))
 }

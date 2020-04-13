@@ -9,6 +9,7 @@ import (
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+
 	"github.com/gofinance/internal"
 	"github.com/gofinance/models"
 	"github.com/gofinance/restapi/operations"
@@ -35,8 +36,26 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 
 	api.JSONProducer = runtime.JSONProducer()
 
-	//actuall handiling of get put price api call
-	api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
+	// Applies when the "x-token" header is set
+
+	api.ApikeyAuth = func(token string) (interface{}, error) {
+		if token == "lol" {
+			prin := models.Principal(token)
+			return &prin, nil
+		}
+		return nil, errors.New(401, "incorrect api key auth")
+	}
+
+	// Applies when the Authorization header is set with the Basic scheme
+	api.BasicAuthAuth = func(user string, pass string) (interface{}, error) {
+		if user == "root" && pass == "root" {
+			prin := models.Principal(user)
+			return &prin, nil
+		}
+		return nil, errors.New(401, "incorrect base auth")
+	}
+
+	api.FinanceapiGetPutPriceHandler = financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams, principal interface{}) middleware.Responder {
 
 		put_price, err := internal.Get_put_price(*params.PutPrice.TimeToMaturity, *params.PutPrice.SpotPrice, *params.PutPrice.StrikePrice, *params.PutPrice.RiskFreeRate, *params.PutPrice.Sigma)
 		if err != nil {
@@ -52,7 +71,7 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 	})
 
 	//actuall handiling of get call price api call
-	api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
+	api.FinanceapiGetCallPriceHandler = financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams, principal interface{}) middleware.Responder {
 		call_price, err := internal.Get_call_price(*params.CallPrice.TimeToMaturity, *params.CallPrice.SpotPrice, *params.CallPrice.StrikePrice, *params.CallPrice.RiskFreeRate, *params.CallPrice.Sigma)
 		if err != nil {
 			resp_err := financeapi.NewGetCallPriceDefault(500)
@@ -66,7 +85,7 @@ func configureAPI(api *operations.FinanceAPI) http.Handler {
 		return resp_ok
 	})
 
-	api.FinanceapiMovingaverageHandler = financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams) middleware.Responder {
+	api.FinanceapiMovingaverageHandler = financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams, principal interface{}) middleware.Responder {
 		mov, err := internal.Get_movingaverage(params.Movingaverage.TimeData, int(*params.Movingaverage.PointToAvg))
 		if err != nil {
 			resp_err := financeapi.NewMovingaverageDefault(500)

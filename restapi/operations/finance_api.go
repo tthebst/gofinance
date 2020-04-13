@@ -43,15 +43,26 @@ func NewFinanceAPI(spec *loads.Document) *FinanceAPI {
 
 		JSONProducer: runtime.JSONProducer(),
 
-		FinanceapiGetCallPriceHandler: financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams) middleware.Responder {
+		FinanceapiGetCallPriceHandler: financeapi.GetCallPriceHandlerFunc(func(params financeapi.GetCallPriceParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation financeapi.GetCallPrice has not yet been implemented")
 		}),
-		FinanceapiGetPutPriceHandler: financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams) middleware.Responder {
+		FinanceapiGetPutPriceHandler: financeapi.GetPutPriceHandlerFunc(func(params financeapi.GetPutPriceParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation financeapi.GetPutPrice has not yet been implemented")
 		}),
-		FinanceapiMovingaverageHandler: financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams) middleware.Responder {
+		FinanceapiMovingaverageHandler: financeapi.MovingaverageHandlerFunc(func(params financeapi.MovingaverageParams, principal interface{}) middleware.Responder {
 			return middleware.NotImplemented("operation financeapi.Movingaverage has not yet been implemented")
 		}),
+
+		// Applies when the "x-token" header is set
+		ApikeyAuth: func(token string) (interface{}, error) {
+			return nil, errors.NotImplemented("api key auth (apikey) x-token from header param [x-token] has not yet been implemented")
+		},
+		// Applies when the Authorization header is set with the Basic scheme
+		BasicAuthAuth: func(user string, pass string) (interface{}, error) {
+			return nil, errors.NotImplemented("basic auth  (basicAuth) has not yet been implemented")
+		},
+		// default authorizer is authorized meaning no requests are blocked
+		APIAuthorizer: security.Authorized(),
 	}
 }
 
@@ -84,6 +95,17 @@ type FinanceAPI struct {
 	// JSONProducer registers a producer for the following mime types:
 	//   - application/json
 	JSONProducer runtime.Producer
+
+	// ApikeyAuth registers a function that takes a token and returns a principal
+	// it performs authentication based on an api key x-token provided in the header
+	ApikeyAuth func(string) (interface{}, error)
+
+	// BasicAuthAuth registers a function that takes username and password and returns a principal
+	// it performs authentication with basic auth
+	BasicAuthAuth func(string, string) (interface{}, error)
+
+	// APIAuthorizer provides access control (ACL/RBAC/ABAC) by providing access to the request and authenticated principal
+	APIAuthorizer runtime.Authorizer
 
 	// FinanceapiGetCallPriceHandler sets the operation handler for the get call price operation
 	FinanceapiGetCallPriceHandler financeapi.GetCallPriceHandler
@@ -157,6 +179,13 @@ func (o *FinanceAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
+	if o.ApikeyAuth == nil {
+		unregistered = append(unregistered, "XTokenAuth")
+	}
+	if o.BasicAuthAuth == nil {
+		unregistered = append(unregistered, "BasicAuthAuth")
+	}
+
 	if o.FinanceapiGetCallPriceHandler == nil {
 		unregistered = append(unregistered, "financeapi.GetCallPriceHandler")
 	}
@@ -181,12 +210,24 @@ func (o *FinanceAPI) ServeErrorFor(operationID string) func(http.ResponseWriter,
 
 // AuthenticatorsFor gets the authenticators for the specified security schemes
 func (o *FinanceAPI) AuthenticatorsFor(schemes map[string]spec.SecurityScheme) map[string]runtime.Authenticator {
-	return nil
+	result := make(map[string]runtime.Authenticator)
+	for name := range schemes {
+		switch name {
+		case "apikey":
+			scheme := schemes[name]
+			result[name] = o.APIKeyAuthenticator(scheme.Name, scheme.In, o.ApikeyAuth)
+
+		case "basicAuth":
+			result[name] = o.BasicAuthenticator(o.BasicAuthAuth)
+
+		}
+	}
+	return result
 }
 
 // Authorizer returns the registered authorizer
 func (o *FinanceAPI) Authorizer() runtime.Authorizer {
-	return nil
+	return o.APIAuthorizer
 }
 
 // ConsumersFor gets the consumers for the specified media types.

@@ -12,16 +12,16 @@ import (
 )
 
 // GetCallPriceHandlerFunc turns a function with the right signature into a get call price handler
-type GetCallPriceHandlerFunc func(GetCallPriceParams) middleware.Responder
+type GetCallPriceHandlerFunc func(GetCallPriceParams, interface{}) middleware.Responder
 
 // Handle executing the request and returning a response
-func (fn GetCallPriceHandlerFunc) Handle(params GetCallPriceParams) middleware.Responder {
-	return fn(params)
+func (fn GetCallPriceHandlerFunc) Handle(params GetCallPriceParams, principal interface{}) middleware.Responder {
+	return fn(params, principal)
 }
 
 // GetCallPriceHandler interface for that can handle valid get call price params
 type GetCallPriceHandler interface {
-	Handle(GetCallPriceParams) middleware.Responder
+	Handle(GetCallPriceParams, interface{}) middleware.Responder
 }
 
 // NewGetCallPrice creates a new http.Handler for the get call price operation
@@ -46,12 +46,25 @@ func (o *GetCallPrice) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	}
 	var Params = NewGetCallPriceParams()
 
+	uprinc, aCtx, err := o.Context.Authorize(r, route)
+	if err != nil {
+		o.Context.Respond(rw, r, route.Produces, route, err)
+		return
+	}
+	if aCtx != nil {
+		r = aCtx
+	}
+	var principal interface{}
+	if uprinc != nil {
+		principal = uprinc
+	}
+
 	if err := o.Context.BindValidRequest(r, route, &Params); err != nil { // bind params
 		o.Context.Respond(rw, r, route.Produces, route, err)
 		return
 	}
 
-	res := o.Handler.Handle(Params) // actually handle the request
+	res := o.Handler.Handle(Params, principal) // actually handle the request
 
 	o.Context.Respond(rw, r, route.Produces, route, res)
 
