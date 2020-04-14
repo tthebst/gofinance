@@ -5,10 +5,9 @@ COPY . /api
 
 WORKDIR /api
 
-RUN go build ./cmd/finance-api-server/main.go
+RUN make build
 
 EXPOSE 3000
 
-RUN swagger serve --port=9000 &
 
-CMD ["./main","--scheme=http","--port","3000","--host", "0.0.0.0"]
+CMD ["./api","--scheme=http","--port","3000","--host", "0.0.0.0"]
