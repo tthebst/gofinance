@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
-	github.com/go-openapi/errors v0.19.4
+	github.com/go-openapi/errors v0.20.0
 	github.com/go-openapi/loads v0.19.5
 	github.com/go-openapi/runtime v0.19.15
 	github.com/go-openapi/spec v0.19.8
